@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+* {
+  font-family: "Schibsted Grotesk", sans-serif;
+  weight: regular;
+}
+
+@theme {
+  --color-bg-p: #111111;
+  --color-bg-s: #1b1b1b;
+  --color-bg-t: #303030;
+
+  --color-content-p: #ffffff;
+  --color-content-body: #e2e2e2;
+  --color-content-heading: #c6c6c6;
+  --color-content-muted: #5e5e5e;
+  --color-content-ph: #777777;
+  --color-content-inverse: #111111;
+
+  --color-accent-brand: #c4f120;
+  --color-accent-red: #e61e32;
+}
