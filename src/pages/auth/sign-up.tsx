@@ -68,8 +68,6 @@ const SignUp = () => {
 
   const onSubmit = (data: SignUpSchema) => console.log(data);
 
-  console.log(errors.password);
-
   return (
     <>
       <Helmet title="Cadastro" />
@@ -207,7 +205,6 @@ const SignUp = () => {
           <Button
             content="Criar conta"
             type="submit"
-            className="disabled:cursor-not-allowed disabled:opacity-70"
             disabled={!isValid}
           />
         </div>

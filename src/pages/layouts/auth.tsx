@@ -19,7 +19,7 @@ const AuthLayout = () => {
         </div>
       </div>
 
-      <div className="bg-bg-s flex w-2/5 flex-col gap-[50px] px-[88px]">
+      <div className="bg-bg-s flex w-2/5 flex-col gap-10 px-[88px]">
         <Outlet />
       </div>
     </div>
