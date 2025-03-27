@@ -1,17 +1,25 @@
 import { LockKeyhole, LockKeyholeOpen, Plus } from "lucide-react";
-import { useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { useSearchParams } from "react-router-dom";
 
 import AlphabetBar from "@/components/alphabet-bar";
 import Button from "@/components/button";
-import ContactsTable from "@/components/contacts-table";
 import Input from "@/components/input";
 import LabelButton from "@/components/label-button";
 import { dataContacts } from "@/helpers/fake-data";
+import ContactsTable from "@/pages/app/contacts-table";
 import { alphabet } from "@/types/alphabet.d";
 
 const Dashboard = () => {
-  const [isLocked, setIsLocked] = useState<boolean>(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const isLocked = searchParams.get("isLocked") === "true";
+
+  const handleIsLockedChange = () => {
+    const newParams = new URLSearchParams(searchParams);
+    const newLockStatus = !isLocked;
+    newParams.set("isLocked", newLockStatus ? "true" : "false");
+    setSearchParams(newParams);
+  };
 
   return (
     <>
@@ -28,7 +36,7 @@ const Dashboard = () => {
             Icon={Plus}
             className="bg-bg-t text-content-p"
           />
-          <LabelButton onClick={() => setIsLocked(!isLocked)}>
+          <LabelButton onClick={handleIsLockedChange}>
             {isLocked ? (
               <LockKeyhole className="h-4 w-4" />
             ) : (

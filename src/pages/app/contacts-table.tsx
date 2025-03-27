@@ -5,17 +5,21 @@ import {
   Trash,
   User,
 } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 
+import { encryptString } from "@/helpers/encrypt-string";
 import { Contact } from "@/types/user";
 
-import Button from "./button";
-import LabelButton from "./label-button";
+import Button from "../../components/button";
+import LabelButton from "../../components/label-button";
 
 interface ContactsTableProps {
   contacts: Contact[];
 }
 
 const ContactsTable = ({ contacts }: ContactsTableProps) => {
+  const [searchParams] = useSearchParams();
+  const isLocked = searchParams.get("isLocked") === "true";
   const handleIsLockedChange = (isLocked: boolean) => (isLocked = !isLocked);
 
   return (
@@ -37,13 +41,19 @@ const ContactsTable = ({ contacts }: ContactsTableProps) => {
                 </div>
                 <div className="flex h-14 flex-col justify-end font-thin">
                   <p className="leading-10">{contact.name}</p>
-                  <p className="leading-[22px]">{contact.description}</p>
+                  <p className="leading-[22px]">
+                    {!isLocked
+                      ? contact.description
+                      : encryptString(contact.description?.length)}
+                  </p>
                 </div>
               </div>
             </td>
-            <td>{contact.phone}</td>
+            <td>
+              {!isLocked ? contact.phone : encryptString(contact.phone.length)}
+            </td>
             <td className="flex h-24 items-center justify-between">
-              {contact.email}
+              {!isLocked ? contact.email : encryptString(contact.email.length)}
               <div className="mt-1 flex items-center gap-2">
                 <Button
                   content="Editar"
