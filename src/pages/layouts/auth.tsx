@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 
-import bg from "../../../public/bg.svg";
-import logo from "../../../public/logo.svg";
+import bg from "@/assets/bg.svg";
+import logo from "@/assets/logo.svg";
 
 const AuthLayout = () => {
   return (
