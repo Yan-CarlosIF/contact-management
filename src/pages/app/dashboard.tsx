@@ -36,7 +36,7 @@ const Dashboard = () => {
             Icon={Plus}
             className="bg-bg-t text-content-p"
           />
-          <LabelButton onClick={handleIsLockedChange}>
+          <LabelButton onClick={handleIsLockedChange} className="max-w-12">
             {isLocked ? (
               <LockKeyhole className="h-4 w-4" />
             ) : (

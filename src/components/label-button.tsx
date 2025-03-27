@@ -11,7 +11,7 @@ const LabelButton = ({ children, className, ...props }: labelButtonProps) => {
     <button
       {...props}
       className={twMerge(
-        "border-bg-t text-content-p hover:border-content-body flex h-12 max-w-12 flex-2 cursor-pointer items-center justify-center rounded-xl border-1 transition-colors duration-300 ease-in-out",
+        "border-bg-t text-content-p hover:border-content-body flex h-12 w-12 flex-2 cursor-pointer items-center justify-center rounded-xl border-1 transition-colors duration-300 ease-in-out",
         className,
       )}
     >

@@ -7,11 +7,13 @@ import {
 } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { encryptString } from "@/helpers/encrypt-string";
 import { Contact } from "@/types/user";
 
 import Button from "../../components/button";
 import LabelButton from "../../components/label-button";
+import EditContactModal from "./edit-contact-modal";
 
 interface ContactsTableProps {
   contacts: Contact[];
@@ -55,11 +57,17 @@ const ContactsTable = ({ contacts }: ContactsTableProps) => {
             <td className="flex h-24 items-center justify-between">
               {!isLocked ? contact.email : encryptString(contact.email.length)}
               <div className="mt-1 flex items-center gap-2">
-                <Button
-                  content="Editar"
-                  Icon={Pencil}
-                  className="bg-bg-s border-bg-t not-disabled:hover:bg-bg-t not-disabled:hover:border-content-body rounded-[14px] border"
-                />
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      content="Editar"
+                      Icon={Pencil}
+                      className="bg-bg-s border-bg-t not-disabled:hover:bg-bg-t not-disabled:hover:border-content-body rounded-[14px] border"
+                    />
+                  </DialogTrigger>
+                  <EditContactModal contact={contact} />
+                </Dialog>
+
                 <LabelButton
                   onClick={() => handleIsLockedChange(contact.isLocked)}
                   className="h-12 w-12"
