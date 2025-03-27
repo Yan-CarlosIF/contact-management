@@ -93,7 +93,6 @@ const SignUp = () => {
               errors.name &&
                 "border-accent-red focus:border-accent-red hover:border-accent-red",
             )}
-            title="Nome"
             id="name"
             placeholder="Como você se chama?"
             {...register("name")}
@@ -118,7 +117,6 @@ const SignUp = () => {
               errors.email &&
                 "border-accent-red focus:border-accent-red hover:border-accent-red",
             )}
-            title="E-mail"
             id="email"
             type="email"
             placeholder="Seu e-mail aqui"
@@ -144,7 +142,6 @@ const SignUp = () => {
               errors.password &&
                 "border-accent-red focus:border-accent-red hover:border-accent-red",
             )}
-            title="Senha"
             id="password"
             type="password"
             placeholder="Escolha uma senha segura"
@@ -170,7 +167,6 @@ const SignUp = () => {
               errors.confirmPassword &&
                 "border-accent-red focus:border-accent-red hover:border-accent-red",
             )}
-            title="Repetir a senha"
             id="confirmPassword"
             type="password"
             placeholder="Repita sua senha para continuar"
@@ -202,11 +198,7 @@ const SignUp = () => {
         </div>
 
         <div className="mt-8 flex justify-end">
-          <Button
-            content="Criar conta"
-            type="submit"
-            disabled={!isValid}
-          />
+          <Button content="Criar conta" type="submit" disabled={!isValid} />
         </div>
       </form>
     </>

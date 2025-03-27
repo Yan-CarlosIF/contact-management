@@ -5,6 +5,14 @@
   weight: regular;
 }
 
+.custom-scroll::-webkit-scrollbar {
+  display: none;
+}
+.custom-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 @theme {
   --color-bg-p: #111111;
   --color-bg-s: #1b1b1b;

@@ -64,7 +64,6 @@ const SignIn = () => {
                   "border-accent-red focus:border-accent-red hover:border-accent-red",
               )}
               id="email"
-              title="E-mail"
               placeholder="Seu e-mail aqui"
               {...register("email")}
             />
@@ -89,7 +88,6 @@ const SignIn = () => {
                   "border-accent-red focus:border-accent-red hover:border-accent-red",
               )}
               id="password"
-              title="Senha"
               placeholder="Insira sua senha"
               {...register("password")}
             />
