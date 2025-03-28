@@ -4,15 +4,13 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Contact } from "@/types/user";
+// import { Contact } from "@/types/user";
 
-interface DeleteContactModalProps {
-  contact?: Pick<Contact, "name">;
-}
+// interface DeleteContactModalProps {
+//   contact?: Pick<Contact, "name">;
+// }
 
-const DeleteContactModal = ({ contact }: DeleteContactModalProps) => {
-  console.log(contact);
-
+const DeleteContactModal = () => {
   return (
     <DialogContent className="bg-bg-p flex flex-col items-center border-0">
       <DialogTitle className="text-content-body font-semibold">

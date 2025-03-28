@@ -1,4 +1,5 @@
 import { LockKeyhole, LockKeyholeOpen, Plus } from "lucide-react";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useSearchParams } from "react-router-dom";
 
@@ -15,12 +16,29 @@ import AddContactModal from "./add-contact-modal";
 
 const Dashboard = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [InputSearch, setInputSearch] = useState<string>("");
   const isLocked = searchParams.get("isLocked") === "true";
   const letterSort = searchParams.get("letterSort");
 
   const sortedAlphabet = letterSort ? [letterSort] : alphabet;
 
   const alphabetContacts = sortedAlphabet ? sortedAlphabet : alphabet;
+
+  const handleInputSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputSearch(value);
+
+    const newParams = new URLSearchParams(searchParams);
+
+    if (value.trim() === "") {
+      newParams.delete("letterSort");
+    } else {
+      const firstLetter = value.charAt(0).toUpperCase();
+      newParams.set("letterSort", firstLetter);
+    }
+
+    setSearchParams(newParams);
+  };
 
   const handleIsLockedChange = () => {
     const newParams = new URLSearchParams(searchParams);
@@ -38,7 +56,12 @@ const Dashboard = () => {
         </h1>
 
         <div className="flex h-12 items-center justify-center gap-[10px]">
-          <Input placeholder="Pesquisar" className="w-[321px] flex-1" />
+          <Input
+            placeholder="Pesquisar"
+            className="w-[321px] flex-1"
+            value={InputSearch}
+            onChange={handleInputSearchChange}
+          />
           <Dialog>
             <DialogTrigger asChild>
               <Button
@@ -62,11 +85,17 @@ const Dashboard = () => {
         <AlphabetBar />
         <div className="custom-scroll mr-14 ml-[106px] flex w-full flex-col gap-[30px] overflow-y-scroll">
           {alphabetContacts.map((letter) => {
-            const contacts = dataContacts.filter((user) => {
-              if (user.name.toUpperCase().startsWith(letter)) {
+            let contacts = dataContacts.filter((user) => {
+              if (user.name.toUpperCase().startsWith(letter.toUpperCase())) {
                 return user;
               }
             });
+
+            if (InputSearch.length > 0) {
+              contacts = contacts.filter((contact) =>
+                contact.name.toLowerCase().includes(InputSearch.toLowerCase()),
+              );
+            }
 
             return (
               <>
