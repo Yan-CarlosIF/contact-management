@@ -13,6 +13,7 @@ import { Contact } from "@/types/user";
 
 import Button from "../../components/button";
 import LabelButton from "../../components/label-button";
+import DeleteContactModal from "./delete-contact-modal";
 import EditContactModal from "./edit-contact-modal";
 
 interface ContactsTableProps {
@@ -39,7 +40,15 @@ const ContactsTable = ({ contacts }: ContactsTableProps) => {
             <td>
               <div className="mt-4 flex gap-4 p-3">
                 <div className="bg-bg-t flex h-11 w-11 items-center justify-center place-self-start rounded-xl">
-                  <User />
+                  {contact.avatar_url ? (
+                    <img
+                      className="h-11 w-11 rounded-xl"
+                      src={contact.avatar_url}
+                      alt="Avatar do contato"
+                    />
+                  ) : (
+                    <User />
+                  )}
                 </div>
                 <div className="flex h-14 flex-col justify-end font-thin">
                   <p className="leading-10">{contact.name}</p>
@@ -78,9 +87,14 @@ const ContactsTable = ({ contacts }: ContactsTableProps) => {
                     <LockKeyholeOpen className="h-4 w-4" />
                   )}
                 </LabelButton>
-                <LabelButton className="hover:text-accent-red hover:border-accent-red h-12 w-12">
-                  <Trash className="h-4 w-4" />
-                </LabelButton>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <LabelButton className="hover:text-accent-red hover:border-accent-red h-12 w-12">
+                      <Trash className="h-4 w-4" />
+                    </LabelButton>
+                  </DialogTrigger>
+                  <DeleteContactModal />
+                </Dialog>
               </div>
             </td>
           </tr>

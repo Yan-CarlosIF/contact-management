@@ -9,7 +9,13 @@ const AlphabetBar = () => {
 
   const handleClick = (letter: string) => {
     const newParams = new URLSearchParams(searchParams);
-    newParams.set("letterSort", letter);
+
+    if (letter === response) {
+      newParams.delete("letterSort");
+    } else {
+      newParams.set("letterSort", letter);
+    }
+
     setSearchParams(newParams);
   };
 

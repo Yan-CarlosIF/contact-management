@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/dialog";
 import Warning from "@/components/warning";
 import { formatarPhoneNumber } from "@/helpers/formatPhoneNumber";
-import { Contact } from "@/types/user";
 
 import AvatarChangeModal from "./avatar-change-modal";
 
@@ -30,11 +29,7 @@ const editModalSchema = z.object({
 
 type EditModalSchema = z.infer<typeof editModalSchema>;
 
-interface editContactModalProps {
-  contact: Pick<Contact, "name" | "email" | "phone" | "avatar_url">;
-}
-
-const EditContactModal = ({ contact }: editContactModalProps) => {
+const AddContactModal = () => {
   const {
     register,
     watch,
@@ -44,9 +39,9 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
     mode: "all",
     resolver: zodResolver(editModalSchema),
     defaultValues: {
-      email: contact.email,
-      name: contact.name,
-      phone: contact.phone,
+      email: "",
+      name: "",
+      phone: "",
     },
   });
 
@@ -57,29 +52,22 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
   return (
     <DialogContent className="bg-bg-p w-[345px] border-0">
       <DialogTitle className="text-content-p text-xl font-bold">
-        Editar contato
+        Adicionar contato
       </DialogTitle>
       <div className="bg-content-muted h-[0.5px] w-full opacity-40"></div>
       <div className="flex w-full flex-col items-center justify-center gap-4">
-        {contact.avatar_url ? (
-          <img
-            className="h-16 w-16 rounded-xl"
-            src={contact.avatar_url}
-            alt="Avatar do contato"
-          />
-        ) : (
-          <div className="bg-bg-t text-content-body flex h-16 w-16 items-center justify-center rounded-xl">
-            <User size={36} />
-          </div>
-        )}
+        <div className="bg-bg-t text-content-body flex h-16 w-16 items-center justify-center rounded-xl">
+          <User size={36} />
+        </div>
+
         <Dialog>
           <DialogTrigger asChild>
             <LabelButton className="w-36 gap-1 py-3 text-sm font-semibold">
               <Upload size={14} />
-              {contact.avatar_url ? "Alterar foto" : "Adicionar foto"}
+              Adicionar foto
             </LabelButton>
           </DialogTrigger>
-          <AvatarChangeModal contact={contact} />
+          <AvatarChangeModal />
         </Dialog>
       </div>
 
@@ -99,7 +87,7 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
                 "border-accent-red focus:border-accent-red hover:border-accent-red",
             )}
             id="name"
-            placeholder="Como você se chama?"
+            placeholder="Nome do contato"
             {...register("name")}
           />
           <Warning
@@ -112,7 +100,7 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
         <Controller
           name="phone"
           control={control}
-          defaultValue={contact.phone}
+          defaultValue=""
           rules={{
             pattern: {
               value: /^\(\d{2}\) \d{4,5}-\d{4}$/,
@@ -171,7 +159,7 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
             )}
             id="email"
             type="email"
-            placeholder="Seu e-mail aqui"
+            placeholder="Email do contato"
             {...register("email")}
           />
           <Warning
@@ -196,4 +184,4 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
   );
 };
 
-export default EditContactModal;
+export default AddContactModal;

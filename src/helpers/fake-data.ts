@@ -3,12 +3,13 @@ import { Contact } from "@/types/user";
 export const dataContacts: Contact[] = [
   {
     id: 1,
-    name: "Arthur Dantas",
+    name: "Yan Carlos",
     phone: "(88) 99686-3599",
-    email: "deiture@gmail.com",
+    email: "yan312005@gmail.com",
     description: "Amigo",
     userId: 1,
     isLocked: false,
+    avatar_url: "https://github.com/Yan-CarlosIF.png",
   },
   {
     id: 2,

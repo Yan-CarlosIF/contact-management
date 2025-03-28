@@ -6,6 +6,7 @@ export interface Contact {
   email: string;
   userId: number;
   isLocked: boolean;
+  avatar_url?: string | null;
 }
 
 export interface User {
