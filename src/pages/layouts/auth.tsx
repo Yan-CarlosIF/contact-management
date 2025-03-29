@@ -1,9 +1,31 @@
-import { Outlet } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 
+import { getUser } from "@/api/get-user";
 import bg from "@/assets/bg.svg";
 import logo from "@/assets/logo.svg";
 
 const AuthLayout = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: getUser,
+    enabled: false,
+  });
+
+  useEffect(() => {
+    if (!user) {
+      queryClient.fetchQuery({ queryKey: ["user"], queryFn: getUser });
+    }
+  }, [user, queryClient]);
+
+  if (user) {
+    navigate("/home");
+  }
+
   return (
     <div className="flex h-screen w-screen">
       <div className="bg-bg-p h-full w-4/5 overflow-hidden bg-cover">

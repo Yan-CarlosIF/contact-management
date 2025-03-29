@@ -1,15 +1,9 @@
-import {
-  LockKeyhole,
-  LockKeyholeOpen,
-  Pencil,
-  Trash,
-  User,
-} from "lucide-react";
+import { Pencil, Trash, User } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 
+import { Contact } from "@/api/get-contacts";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { encryptString } from "@/helpers/encrypt-string";
-import { Contact } from "@/types/user";
 
 import Button from "../../components/button";
 import LabelButton from "../../components/label-button";
@@ -23,20 +17,19 @@ interface ContactsTableProps {
 const ContactsTable = ({ contacts }: ContactsTableProps) => {
   const [searchParams] = useSearchParams();
   const isLocked = searchParams.get("isLocked") === "true";
-  const handleIsLockedChange = (isLocked: boolean) => (isLocked = !isLocked);
 
   return (
     <table className="text-content-p">
       <thead className="text-content-muted text-left">
         <tr>
           <th className="w-100">NOME</th>
-          <th className="w-30">TELEFONE</th>
-          <th className="w-100">EMAIL</th>
+          <th className="w-40">TELEFONE</th>
+          <th className="w-120">EMAIL</th>
         </tr>
       </thead>
       <tbody>
         {contacts.map((contact) => (
-          <tr>
+          <tr key={contact.id}>
             <td>
               <div className="mt-4 flex gap-4 p-3">
                 <div className="bg-bg-t flex h-11 w-11 items-center justify-center place-self-start rounded-xl">
@@ -71,29 +64,19 @@ const ContactsTable = ({ contacts }: ContactsTableProps) => {
                     <Button
                       content="Editar"
                       Icon={Pencil}
-                      className="bg-bg-s border-bg-t not-disabled:hover:bg-bg-t not-disabled:hover:border-content-body rounded-[14px] border"
+                      className="bg-bg-s border-bg-t not-disabled:hover:bg-bg-t not-disabled:hover:border-content-body rounded-[14px] border px-6"
                     />
                   </DialogTrigger>
                   <EditContactModal contact={contact} />
                 </Dialog>
 
-                <LabelButton
-                  onClick={() => handleIsLockedChange(contact.isLocked)}
-                  className="h-12 w-12"
-                >
-                  {contact.isLocked ? (
-                    <LockKeyhole className="h-4 w-4" />
-                  ) : (
-                    <LockKeyholeOpen className="h-4 w-4" />
-                  )}
-                </LabelButton>
                 <Dialog>
                   <DialogTrigger asChild>
-                    <LabelButton className="hover:text-accent-red hover:border-accent-red h-12 w-12">
+                    <LabelButton className="hover:text-accent-red hover:border-accent-red h-13 w-13">
                       <Trash className="h-4 w-4" />
                     </LabelButton>
                   </DialogTrigger>
-                  <DeleteContactModal />
+                  <DeleteContactModal contact={contact} />
                 </Dialog>
               </div>
             </td>

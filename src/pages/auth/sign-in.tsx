@@ -1,8 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import z from "zod";
+
+import { login } from "@/api/login";
 
 import Button from "../../components/button";
 import Input from "../../components/input";
@@ -17,10 +22,13 @@ const signInSchema = z.object({
 type SignInSchema = z.infer<typeof signInSchema>;
 
 const SignIn = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { isValid, errors },
+    watch,
   } = useForm<SignInSchema>({
     mode: "all",
     resolver: zodResolver(signInSchema),
@@ -30,10 +38,22 @@ const SignIn = () => {
     },
   });
 
-  const email = register("email");
-  const password = register("password");
+  const email = watch("email");
+  const password = watch("password");
 
-  const onSubmit = (data: SignInSchema) => console.log(data);
+  const { mutateAsync: loginFn, isPending: isLoginPending } = useMutation({
+    mutationFn: login,
+    onSuccess: () => {
+      toast.success("Logado com sucesso!", {
+        closeButton: true,
+      });
+      navigate("/home");
+    },
+    onError: () =>
+      toast.error("Erro ao logar, Email ou senha incorretos", {
+        closeButton: true,
+      }),
+  });
 
   return (
     <>
@@ -49,7 +69,10 @@ const SignIn = () => {
           Acessar conta
         </h1>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+        <form
+          onSubmit={handleSubmit(() => loginFn({ email, password }))}
+          className="flex flex-col"
+        >
           <div>
             <label
               htmlFor="email"
@@ -88,6 +111,7 @@ const SignIn = () => {
                   "border-accent-red focus:border-accent-red hover:border-accent-red",
               )}
               id="password"
+              type="password"
               placeholder="Insira sua senha"
               {...register("password")}
             />
@@ -100,7 +124,11 @@ const SignIn = () => {
           </div>
 
           <div className="flex justify-end">
-            <Button type="submit" content="Acessar conta" disabled={!isValid} />
+            <Button
+              type="submit"
+              content="Acessar conta"
+              disabled={!isValid || isLoginPending}
+            />
           </div>
         </form>
       </div>

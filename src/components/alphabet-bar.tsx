@@ -20,11 +20,12 @@ const AlphabetBar = () => {
   };
 
   return (
-    <aside className="bg-accent-brand custom-scroll flex w-15 flex-col items-center gap-3 overflow-y-scroll rounded-[20px] py-3">
+    <aside className="bg-accent-brand custom-scroll flex w-20 flex-col items-center gap-3 overflow-y-scroll rounded-3xl py-3">
       {alphabet.map((letter) => (
         <button
+          key={letter}
           className={twMerge(
-            "hover: cursor-pointer text-sm font-bold opacity-40 transition-all duration-300 ease-in-out",
+            "hover: text-md text-md cursor-pointer font-bold opacity-40 transition-all duration-300 ease-in-out",
             response === letter && "text-xl opacity-100",
           )}
           onClick={() => handleClick(letter)}

@@ -1,8 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import z from "zod";
+
+import { addUser } from "@/api/add-user";
 
 import Button from "../../components/button";
 import Input from "../../components/input";
@@ -37,10 +42,13 @@ const signUpSchema = z
 type SignUpSchema = z.infer<typeof signUpSchema>;
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { isValid, errors, touchedFields },
   } = useForm<SignUpSchema>({
     mode: "all",
@@ -66,7 +74,24 @@ const SignUp = () => {
     return /[^a-zA-Z\s]/.test(str);
   };
 
-  const onSubmit = (data: SignUpSchema) => console.log(data);
+  const { mutateAsync: addUserFn, isPending: isAddUserPending } = useMutation({
+    mutationFn: addUser,
+    onSuccess: () => {
+      reset();
+      toast.success("Conta criada com sucesso!", {
+        closeButton: true,
+        action: { label: "Ir para login", onClick: () => navigate("/sign-in") },
+      });
+    },
+    onError: () =>
+      toast.error("Erro ao criar conta, Email já cadastrado", {
+        closeButton: true,
+      }),
+  });
+
+  const handleSubmitForm = () => {
+    addUserFn({ name, email, password });
+  };
 
   return (
     <>
@@ -79,7 +104,7 @@ const SignUp = () => {
 
       <h1 className="text-content-body text-[24px] font-bold">Criar conta</h1>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+      <form onSubmit={handleSubmit(handleSubmitForm)} className="flex flex-col">
         <div>
           <label
             htmlFor="name"
@@ -198,7 +223,11 @@ const SignUp = () => {
         </div>
 
         <div className="mt-8 flex justify-end">
-          <Button content="Criar conta" type="submit" disabled={!isValid} />
+          <Button
+            content="Criar conta"
+            type="submit"
+            disabled={!isValid || isAddUserPending}
+          />
         </div>
       </form>
     </>

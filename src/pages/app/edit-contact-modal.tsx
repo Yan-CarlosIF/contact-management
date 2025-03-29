@@ -1,14 +1,18 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Upload, User } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
 
+import { updateContact } from "@/api/update-contact";
 import Button from "@/components/button";
 import Input from "@/components/input";
 import LabelButton from "@/components/label-button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogTitle,
   DialogTrigger,
@@ -31,10 +35,12 @@ const editModalSchema = z.object({
 type EditModalSchema = z.infer<typeof editModalSchema>;
 
 interface editContactModalProps {
-  contact: Pick<Contact, "name" | "email" | "phone" | "avatar_url">;
+  contact: Pick<Contact, "name" | "email" | "phone" | "avatar_url" | "id">;
 }
 
 const EditContactModal = ({ contact }: editContactModalProps) => {
+  const queryClient = useQueryClient();
+
   const {
     register,
     watch,
@@ -54,8 +60,49 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
   const email = watch("email");
   const phone = watch("phone");
 
+  const { mutateAsync: editContactFn } = useMutation({
+    mutationKey: ["get-contacts"],
+    mutationFn: updateContact,
+    onMutate: ({ contactId, name, email, phone }) => {
+      const oldContacts = queryClient.getQueryData<Contact[]>(["get-contacts"]);
+
+      queryClient.setQueryData<Contact[]>(["get-contacts"], (oldContacts) => {
+        if (oldContacts) {
+          return oldContacts.map((contact) => {
+            if (contact.id === contactId) {
+              return {
+                ...contact,
+                name,
+                email,
+                phone,
+              };
+            }
+            return contact;
+          });
+        }
+      });
+
+      toast.success("Contato editado com sucesso!");
+      return { oldContacts };
+    },
+
+    onError: (_, __, context) => {
+      if (context?.oldContacts) {
+        queryClient.setQueryData(["get-contacts"], context.oldContacts);
+      }
+      toast.error("Erro ao editar contato");
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["get-contacts"] });
+    },
+  });
+
   return (
-    <DialogContent className="bg-bg-p w-[345px] border-0">
+    <DialogContent
+      aria-describedby={undefined}
+      className="bg-bg-p w-[345px] border-0"
+    >
       <DialogTitle className="text-content-p text-xl font-bold">
         Editar contato
       </DialogTitle>
@@ -139,10 +186,9 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
                 type="tel"
                 placeholder="Número de telefone"
                 onChange={(e) => {
-                  console.log(fieldState.error);
-                  const semEspacos = e.target.value.replace(/\s/g, "");
-                  const valorFormatado = formatarPhoneNumber(semEspacos);
-                  field.onChange(valorFormatado);
+                  const noSpaces = e.target.value.replace(/\s/g, "");
+                  const formattedValue = formatarPhoneNumber(noSpaces);
+                  field.onChange(formattedValue);
                 }}
               />
               <Warning
@@ -189,7 +235,16 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
             content="Cancelar"
             className="bg-bg-t not-disabled:hover:bg-accent-red text-content-p"
           />
-          <Button content="Salvar" type="submit" disabled={!isValid} />
+          <DialogClose asChild>
+            <Button
+              content="Salvar"
+              type="button"
+              disabled={!isValid}
+              onClick={() =>
+                editContactFn({ contactId: contact.id, email, name, phone })
+              }
+            />
+          </DialogClose>
         </div>
       </form>
     </DialogContent>

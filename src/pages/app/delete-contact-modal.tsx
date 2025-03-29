@@ -1,24 +1,56 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+import { deleteContact } from "@/api/delete-contact";
+import { Contact } from "@/api/get-contacts";
 import Button from "@/components/button";
 import {
   DialogClose,
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
-// import { Contact } from "@/types/user";
 
-// interface DeleteContactModalProps {
-//   contact?: Pick<Contact, "name">;
-// }
+interface DeleteContactModalProps {
+  contact: Pick<Contact, "id">;
+}
 
-const DeleteContactModal = () => {
+const DeleteContactModal = ({ contact }: DeleteContactModalProps) => {
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: deleteContactFn } = useMutation({
+    mutationKey: ["get-contacts"],
+    mutationFn: deleteContact,
+    onMutate({ id }) {
+      const oldContacts = queryClient.getQueryData<Contact[]>(["get-contacts"]);
+
+      queryClient.setQueryData<Contact[]>(["get-contacts"], (old) =>
+        old?.filter((contact) => contact.id !== id),
+      );
+
+      toast.success("Contato excluído com sucesso!", { closeButton: true });
+      return { oldContacts };
+    },
+
+    onError: (_, __, context) => {
+      if (context?.oldContacts) {
+        queryClient.setQueryData(["get-contacts"], context.oldContacts);
+      }
+
+      toast.error("Erro ao excluir contato", { closeButton: true });
+    },
+  });
+
   return (
-    <DialogContent className="bg-bg-p flex flex-col items-center border-0">
+    <DialogContent
+      aria-describedby={undefined}
+      className="bg-bg-p flex flex-col items-center border-0"
+    >
       <DialogTitle className="text-content-body font-semibold">
         Tem certeza que deseja excluir esse contato?
       </DialogTitle>
       <div className="bg-content-muted h-[0.5px] w-full opacity-40"></div>
       <div className="mt-2 flex justify-center gap-[13px]">
-        <DialogClose>
+        <DialogClose asChild>
           <Button
             type="button"
             content="Cancelar"
@@ -26,7 +58,10 @@ const DeleteContactModal = () => {
           />
         </DialogClose>
         <DialogClose asChild>
-          <Button content="Confirmar" />
+          <Button
+            content="Confirmar"
+            onClick={() => deleteContactFn({ id: contact.id })}
+          />
         </DialogClose>
       </div>
     </DialogContent>
