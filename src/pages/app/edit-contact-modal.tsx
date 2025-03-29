@@ -1,12 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Upload, User } from "lucide-react";
+import { Upload } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
 
 import { updateContact } from "@/api/update-contact";
+import userModal from "@/assets/user_img_modal.svg";
 import Button from "@/components/button";
 import Input from "@/components/input";
 import LabelButton from "@/components/label-button";
@@ -63,7 +64,7 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
   const { mutateAsync: editContactFn } = useMutation({
     mutationKey: ["get-contacts"],
     mutationFn: updateContact,
-    onMutate: ({ contactId, name, email, phone }) => {
+    onMutate: ({ contactId, name, email, phone, avatar_url }) => {
       const oldContacts = queryClient.getQueryData<Contact[]>(["get-contacts"]);
 
       queryClient.setQueryData<Contact[]>(["get-contacts"], (oldContacts) => {
@@ -75,6 +76,7 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
                 name,
                 email,
                 phone,
+                avatar_url,
               };
             }
             return contact;
@@ -82,7 +84,7 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
         }
       });
 
-      toast.success("Contato editado com sucesso!");
+      toast.success("Contato editado com sucesso!", { closeButton: true });
       return { oldContacts };
     },
 
@@ -90,11 +92,7 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
       if (context?.oldContacts) {
         queryClient.setQueryData(["get-contacts"], context.oldContacts);
       }
-      toast.error("Erro ao editar contato");
-    },
-
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["get-contacts"] });
+      toast.error("Erro ao editar contato", { closeButton: true });
     },
   });
 
@@ -108,17 +106,12 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
       </DialogTitle>
       <div className="bg-content-muted h-[0.5px] w-full opacity-40"></div>
       <div className="flex w-full flex-col items-center justify-center gap-4">
-        {contact.avatar_url ? (
-          <img
-            className="h-16 w-16 rounded-xl"
-            src={contact.avatar_url}
-            alt="Avatar do contato"
-          />
-        ) : (
-          <div className="bg-bg-t text-content-body flex h-16 w-16 items-center justify-center rounded-xl">
-            <User size={36} />
-          </div>
-        )}
+        <img
+          className="h-16 w-16 rounded-2xl"
+          src={contact.avatar_url ?? userModal}
+          alt="Avatar do contato"
+          onError={(e) => (e.currentTarget.src = userModal)}
+        />
         <Dialog>
           <DialogTrigger asChild>
             <LabelButton className="w-36 gap-1 py-3 text-sm font-semibold">
@@ -240,9 +233,16 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
               content="Salvar"
               type="button"
               disabled={!isValid}
-              onClick={() =>
-                editContactFn({ contactId: contact.id, email, name, phone })
-              }
+              onClick={() => {
+                editContactFn({
+                  contactId: contact.id,
+                  email,
+                  name,
+                  phone,
+                  avatar_url: contact.avatar_url,
+                });
+                console.log(contact.avatar_url);
+              }}
             />
           </DialogClose>
         </div>

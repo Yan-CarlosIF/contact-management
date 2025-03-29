@@ -113,6 +113,8 @@ const Dashboard = () => {
                 );
               }
 
+              contacts = contacts ? contacts.sort() : [];
+
               return (
                 <React.Fragment key={letter}>
                   <div className="flex flex-col gap-5">

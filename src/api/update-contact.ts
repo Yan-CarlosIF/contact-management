@@ -5,6 +5,7 @@ interface UpdateContactSchema {
   name: string;
   email: string;
   phone: string;
+  avatar_url: string | null | undefined;
 }
 
 export const updateContact = async ({
@@ -12,11 +13,13 @@ export const updateContact = async ({
   name,
   email,
   phone,
+  avatar_url,
 }: UpdateContactSchema) => {
   await api.put<UpdateContactSchema>(`/updateContact`, {
     contactId,
     name,
     email,
     phone,
+    avatar_url,
   });
 };

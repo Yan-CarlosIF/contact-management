@@ -14,7 +14,7 @@ interface DeleteContactModalProps {
   contact: Pick<Contact, "id">;
 }
 
-const DeleteContactModal = ({ contact }: DeleteContactModalProps) => {
+const DeleteContactPopover = ({ contact }: DeleteContactModalProps) => {
   const queryClient = useQueryClient();
 
   const { mutateAsync: deleteContactFn } = useMutation({
@@ -68,4 +68,4 @@ const DeleteContactModal = ({ contact }: DeleteContactModalProps) => {
   );
 };
 
-export default DeleteContactModal;
+export default DeleteContactPopover;

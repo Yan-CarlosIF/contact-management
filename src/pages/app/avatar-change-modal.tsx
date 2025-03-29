@@ -12,13 +12,13 @@ import {
 import { Contact } from "@/types/user";
 
 const avatarChangeModalSchema = z.object({
-  linkAvatar: z.string().nonempty("O link da imagem é obrigatorio"),
+  linkAvatar: z.string().nullable(),
 });
 
 type AvatarChangeModalData = z.infer<typeof avatarChangeModalSchema>;
 
 interface AvatarChangeModalProps {
-  contact?: Pick<Contact, "name" | "email" | "phone" | "avatar_url">;
+  contact?: Pick<Contact, "avatar_url">;
 }
 
 const AvatarChangeModal = ({ contact }: AvatarChangeModalProps) => {
@@ -26,14 +26,21 @@ const AvatarChangeModal = ({ contact }: AvatarChangeModalProps) => {
     mode: "all",
     resolver: zodResolver(avatarChangeModalSchema),
   });
-
+  
   const onSubmit = (data: AvatarChangeModalData) => {
     if (!contact) return;
+    if (data.linkAvatar === "") data.linkAvatar = null;
+
     contact.avatar_url = data.linkAvatar;
+    console.log(contact.avatar_url);
   };
 
+  const handleCancelButtonClick = () => {
+    if (contact?.avatar_url) contact.avatar_url = null;
+  };
+  
   return (
-    <DialogContent className="bg-bg-p border-0">
+    <DialogContent aria-describedby={undefined} className="bg-bg-p border-0">
       <DialogTitle className="text-content-body font-semibold">
         Link da Imagem
       </DialogTitle>
@@ -44,11 +51,14 @@ const AvatarChangeModal = ({ contact }: AvatarChangeModalProps) => {
           {...register("linkAvatar")}
         />
         <div className="mt-4 flex justify-end gap-[13px]">
-          <Button
-            type="button"
-            content="Cancelar"
-            className="bg-bg-t not-disabled:hover:bg-accent-red text-content-p"
-          />
+          <DialogClose asChild>
+            <Button
+              type="button"
+              className="bg-bg-t not-disabled:hover:bg-accent-red text-content-p"
+              content={contact?.avatar_url ? "Excluir" : "Cancelar"}
+              onClick={handleCancelButtonClick}
+            />
+          </DialogClose>
           <DialogClose asChild>
             <Button content="Salvar" type="submit" />
           </DialogClose>

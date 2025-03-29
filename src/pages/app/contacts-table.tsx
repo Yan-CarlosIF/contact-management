@@ -1,13 +1,14 @@
-import { Pencil, Trash, User } from "lucide-react";
+import { Pencil, Trash } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 
 import { Contact } from "@/api/get-contacts";
+import userTable from "@/assets/user_img_table.svg";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { encryptString } from "@/helpers/encrypt-string";
 
 import Button from "../../components/button";
 import LabelButton from "../../components/label-button";
-import DeleteContactModal from "./delete-contact-modal";
+import DeleteContactPopover from "./delete-contact-popover";
 import EditContactModal from "./edit-contact-modal";
 
 interface ContactsTableProps {
@@ -33,17 +34,14 @@ const ContactsTable = ({ contacts }: ContactsTableProps) => {
             <td>
               <div className="mt-4 flex gap-4 p-3">
                 <div className="bg-bg-t flex h-11 w-11 items-center justify-center place-self-start rounded-xl">
-                  {contact.avatar_url ? (
-                    <img
-                      className="h-11 w-11 rounded-xl"
-                      src={contact.avatar_url}
-                      alt="Avatar do contato"
-                    />
-                  ) : (
-                    <User />
-                  )}
+                  <img
+                    className="h-11 w-11 rounded-2xl"
+                    src={contact.avatar_url ?? userTable}
+                    alt="Avatar do contato"
+                    onError={(e) => (e.currentTarget.src = userTable)}
+                  />
                 </div>
-                <div className="flex h-14 flex-col justify-end font-thin">
+                <div className="flex h-11 flex-col justify-center font-thin">
                   <p className="leading-10">{contact.name}</p>
                   <p className="leading-[22px]">
                     {!isLocked
@@ -76,7 +74,7 @@ const ContactsTable = ({ contacts }: ContactsTableProps) => {
                       <Trash className="h-4 w-4" />
                     </LabelButton>
                   </DialogTrigger>
-                  <DeleteContactModal contact={contact} />
+                  <DeleteContactPopover contact={contact} />
                 </Dialog>
               </div>
             </td>

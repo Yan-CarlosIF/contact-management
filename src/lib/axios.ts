@@ -5,9 +5,9 @@ export const api = axios.create({
   withCredentials: true,
 });
 
-api.interceptors.request.use(async (config) => {
-  await new Promise((resolve) =>
-    setTimeout(resolve, Math.round(Math.random() * 5000)),
-  );
-  return config;
-});
+// api.interceptors.request.use(async (config) => {
+//   await new Promise((resolve) =>
+//     setTimeout(resolve, Math.round(Math.random() * 5000)),
+//   );
+//   return config;
+// });
