@@ -79,14 +79,13 @@ const SignUp = () => {
     onSuccess: () => {
       reset();
       toast.success("Conta criada com sucesso!", {
-        closeButton: true,
-        action: { label: "Ir para login", onClick: () => navigate("/sign-in") },
+        action: {
+          label: "Ir para o login",
+          onClick: () => navigate("/sign-in"),
+        },
       });
     },
-    onError: () =>
-      toast.error("Erro ao criar conta, Email já cadastrado", {
-        closeButton: true,
-      }),
+    onError: () => toast.error("Erro ao criar conta, Email já cadastrado"),
   });
 
   const handleSubmitForm = () => {

@@ -84,7 +84,7 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
         }
       });
 
-      toast.success("Contato editado com sucesso!", { closeButton: true });
+      toast.success("Contato editado com sucesso!");
       return { oldContacts };
     },
 
@@ -92,7 +92,7 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
       if (context?.oldContacts) {
         queryClient.setQueryData(["get-contacts"], context.oldContacts);
       }
-      toast.error("Erro ao editar contato", { closeButton: true });
+      toast.error("Erro ao editar contato");
     },
   });
 

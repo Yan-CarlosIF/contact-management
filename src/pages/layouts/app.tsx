@@ -20,7 +20,7 @@ const AppLayout = () => {
 
   const handleLogout = async () => {
     const { message } = await logout();
-    toast.success(message, { closeButton: true });
+    toast.success(message);
     navigate("/sign-in");
     queryClient.clear();
   };

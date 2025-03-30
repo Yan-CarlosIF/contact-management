@@ -27,7 +27,7 @@ const DeleteContactPopover = ({ contact }: DeleteContactModalProps) => {
         old?.filter((contact) => contact.id !== id),
       );
 
-      toast.success("Contato excluído com sucesso!", { closeButton: true });
+      toast.success("Contato excluído com sucesso!");
       return { oldContacts };
     },
 
@@ -36,7 +36,7 @@ const DeleteContactPopover = ({ contact }: DeleteContactModalProps) => {
         queryClient.setQueryData(["get-contacts"], context.oldContacts);
       }
 
-      toast.error("Erro ao excluir contato", { closeButton: true });
+      toast.error("Erro ao excluir contato");
     },
   });
 

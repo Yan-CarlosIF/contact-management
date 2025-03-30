@@ -44,15 +44,10 @@ const SignIn = () => {
   const { mutateAsync: loginFn, isPending: isLoginPending } = useMutation({
     mutationFn: login,
     onSuccess: () => {
-      toast.success("Logado com sucesso!", {
-        closeButton: true,
-      });
+      toast.success("Logado com sucesso!");
       navigate("/home");
     },
-    onError: () =>
-      toast.error("Erro ao logar, Email ou senha incorretos", {
-        closeButton: true,
-      }),
+    onError: () => toast.error("Erro ao logar, Email ou senha incorretos"),
   });
 
   return (

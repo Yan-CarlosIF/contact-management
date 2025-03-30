@@ -83,7 +83,7 @@ const AddContactModal = () => {
           old ? [...old, newContact] : [newContact],
         );
 
-        toast.success("Contato adicionado com sucesso!", { closeButton: true });
+        toast.success("Contato adicionado com sucesso!");
 
         return { oldContacts };
       },
@@ -92,7 +92,7 @@ const AddContactModal = () => {
         if (context?.oldContacts) {
           queryClient.setQueryData(["get-contacts"], context.oldContacts);
         }
-        toast.error("Erro ao adicionar contato", { closeButton: true });
+        toast.error("Erro ao adicionar contato");
       },
 
       onSettled: () => {

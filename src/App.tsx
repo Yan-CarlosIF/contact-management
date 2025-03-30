@@ -9,7 +9,11 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-      <Toaster />
+      <Toaster
+        toastOptions={{
+          closeButton: true,
+        }}
+      />
     </QueryClientProvider>
   );
 };

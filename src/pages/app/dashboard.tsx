@@ -134,8 +134,8 @@ const Dashboard = () => {
           <div className="flex h-full w-full flex-col items-center justify-center">
             <Ellipsis className="text-content-p flex h-12 w-12 animate-ping items-center justify-center" />
             <p className="text-content-ph mt-4">
-              Primeira requisição demora um pouco por que o servidor entrou em
-              modo hibernate, aguarde...
+              Primeira requisição demora um pouco por que o servidor da API
+              entrou em modo hibernação, aguarde...
             </p>
           </div>
         )}
