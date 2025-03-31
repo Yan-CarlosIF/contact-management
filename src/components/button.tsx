@@ -11,7 +11,7 @@ const Button = ({ Icon, content, className, ...props }: ButtonProps) => {
     <button
       {...props}
       className={twMerge(
-        "bg-accent-brand flex cursor-pointer items-center justify-center gap-1 rounded-xl px-3 py-4 text-sm leading-5 font-semibold text-nowrap transition-colors duration-200 ease-in-out not-disabled:hover:bg-[#A8D30D] disabled:cursor-not-allowed disabled:opacity-70",
+        "bg-accent-brand flex cursor-pointer items-center justify-center gap-1 rounded-xl px-3 py-4 text-sm leading-5 font-semibold text-nowrap transition-colors duration-200 ease-in-out not-disabled:hover:bg-[#05dbd2] disabled:cursor-not-allowed disabled:opacity-70",
         className,
       )}
     >

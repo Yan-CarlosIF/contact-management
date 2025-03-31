@@ -36,7 +36,7 @@ const AuthLayout = () => {
         <div className="absolute top-16 left-34 z-10 flex items-center gap-2">
           <img src={logo} alt="" />
           <h1 className="text-content-body text-[24px] font-extrabold">
-            GUARD
+            YAN
           </h1>
         </div>
       </div>

@@ -74,7 +74,7 @@ const Dashboard = () => {
               <Button
                 content="Adicionar Contato"
                 Icon={Plus}
-                className="bg-bg-t text-content-p"
+                className="bg-bg-t text-content-p not-disabled:hover:bg-[#05dbd0ab]"
               />
             </DialogTrigger>
             <AddContactModal />

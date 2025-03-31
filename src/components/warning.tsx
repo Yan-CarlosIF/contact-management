@@ -18,14 +18,14 @@ const Warning = ({ content, done, className, type }: WarningProps) => {
     >
       {done ? (
         type === "warning" ? (
-          <CircleAlert fill="#c4f120" className="text-bg-s h-5 w-5" />
+          <CircleAlert fill="#00c7be" className="text-bg-s h-5 w-5" />
         ) : (
           <CircleCheck fill="green" className="text-bg-s h-5 w-5" />
         )
       ) : type === "error" ? (
         <CircleX fill="red" className="text-bg-s h-5 w-5" />
       ) : (
-        <CircleAlert fill="#c4f120" className="text-bg-s h-5 w-5" />
+        <CircleAlert fill="#00c7be" className="text-bg-s h-5 w-5" />
       )}
       <p>{content}</p>
     </div>
