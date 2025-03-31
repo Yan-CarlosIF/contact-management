@@ -43,6 +43,7 @@ const AddContactModal = () => {
     watch,
     formState: { errors, isValid },
     control,
+    reset,
   } = useForm<EditModalSchema>({
     mode: "all",
     resolver: zodResolver(editModalSchema),
@@ -254,6 +255,7 @@ const AddContactModal = () => {
             type="button"
             content="Cancelar"
             className="bg-bg-t not-disabled:hover:bg-accent-red text-content-p"
+            onClick={() => reset()}
           />
           <DialogClose asChild>
             <Button
