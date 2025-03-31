@@ -251,12 +251,14 @@ const AddContactModal = () => {
 
         <div className="bg-content-muted h-[0.5px] w-full opacity-40"></div>
         <div className="mt-4 flex justify-end gap-[13px]">
-          <Button
-            type="button"
-            content="Cancelar"
-            className="bg-bg-t not-disabled:hover:bg-accent-red text-content-p"
-            onClick={() => reset()}
-          />
+          <DialogClose asChild>
+            <Button
+              type="button"
+              content="Cancelar"
+              className="bg-bg-t not-disabled:hover:bg-accent-red text-content-p"
+              onClick={() => reset()}
+            />
+          </DialogClose>
           <DialogClose asChild>
             <Button
               className="px-4"
