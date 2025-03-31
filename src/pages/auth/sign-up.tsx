@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -226,8 +227,18 @@ const SignUp = () => {
             content="Criar conta"
             type="submit"
             disabled={!isValid || isAddUserPending}
+            className={twMerge(isAddUserPending && "disabled:cursor-wait")}
           />
         </div>
+        {isAddUserPending && (
+          <div className="mt-10 flex w-full flex-col">
+            <Loader2 className="text-accent-brand animate-spin self-center" />
+            <p className="text-content-heading mt-4 text-justify text-sm">
+              Primeira requisição demora um pouco, o servidor da API entrou em
+              modo hibernação, aguarde...
+            </p>
+          </div>
+        )}
       </form>
     </>
   );
