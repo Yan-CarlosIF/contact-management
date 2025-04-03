@@ -265,15 +265,17 @@ const AddContactModal = () => {
               content="Salvar"
               type="button"
               disabled={!isValid || isAddContactPending}
-              onClick={() =>
+              onClick={() => {
                 addContactFn({
                   name,
                   description,
                   phone,
                   email,
                   avatar_url: null,
-                })
-              }
+                });
+
+                reset();
+              }}
             />
           </DialogClose>
         </div>

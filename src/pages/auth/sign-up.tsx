@@ -79,12 +79,8 @@ const SignUp = () => {
     mutationFn: addUser,
     onSuccess: () => {
       reset();
-      toast.success("Conta criada com sucesso!", {
-        action: {
-          label: "Ir para o login",
-          onClick: () => navigate("/sign-in"),
-        },
-      });
+      toast.success("Conta criada com sucesso!");
+      navigate("/sign-in");
     },
     onError: () => toast.error("Erro ao criar conta, Email já cadastrado"),
   });
