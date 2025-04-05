@@ -1,6 +1,6 @@
 # 📇 Contact Management
 
-Uma aplicação fullstack para gerenciamento de contatos com autenticação via cookies. O projeto permite que usuários cadastrem, editem e excluam contatos, além de visualizar suas informações de forma simples e intuitiva.
+Uma aplicação fullstack para gerenciamento de contatos com autenticação via JWT e cookies (HTTP-only). O projeto permite que usuários cadastrem, editem e excluam contatos, além de visualizar suas informações de forma simples e intuitiva.
 
 ---
 
@@ -18,11 +18,13 @@ Uma aplicação fullstack para gerenciamento de contatos com autenticação via 
 - [Lucide React Icons](https://lucide.dev/)
 - [Shadcn UI](https://ui.shadcn.com/) (para componentes e estilos)
 
-### Backend - [Repositorio do Backend](https://github.com/Yan-CarlosIF/contact-management-api)
+### Backend - [Repositorio do Backend](https://github.com/Yan-CarlosIF/api-contact-management)
 
 - [Node.js](https://nodejs.org/)
 - [Fastify](https://fastify.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
+- [JWT](https://jwt.io/)
+- [Prisma](https://www.prisma.io/)
 - [PostgreSQL](https://www.postgresql.org/)
 
 ---
@@ -45,7 +47,7 @@ Uma aplicação fullstack para gerenciamento de contatos com autenticação via 
 
 ```bash
 git clone https://github.com/Yan-CarlosIF/contact-management.git # Frontend
-git clone https://github.com/Yan-CarlosIF/contact-management-api.git # Backend
+git clone https://github.com/Yan-CarlosIF/api-contact-management.git # Backend
 ```
 
 ---
@@ -75,7 +77,7 @@ O frontend ficará disponível em: `http://localhost:5173`
   https://contact-management-rho-green.vercel.app/
 
 - **Backend (Render):**  
-  https://contact-management-api-wcsq.onrender.com/
+  https://api-contact-management.onrender.com/
 
 ---
 
@@ -88,7 +90,8 @@ O frontend ficará disponível em: `http://localhost:5173`
  ┣ 📁 components     # Componentes reutilizáveis
  ┣ 📁 helpers        # Funções utilitárias
  ┣ 📁 lib            # Configurações das bibliotecas
- ┗ 📁 pages          # Páginas da aplicação
+ ┣ 📁 pages          # Páginas da aplicação
+ ┗ 📁 types          # Tipagem dos modelos do prisma
 ```
 
 ---
