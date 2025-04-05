@@ -5,5 +5,5 @@ interface LogoutResponse {
 }
 
 export async function logout() {
-  return (await api.get<LogoutResponse>("/logout")).data;
+  return (await api.post<LogoutResponse>("/auth/logout")).data;
 }

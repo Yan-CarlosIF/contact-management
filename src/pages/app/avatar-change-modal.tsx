@@ -9,7 +9,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Contact } from "@/types/user";
+import { Contact } from "@/types/shared/contact";
 
 const avatarChangeModalSchema = z.object({
   linkAvatar: z.string().nullable(),
@@ -18,7 +18,7 @@ const avatarChangeModalSchema = z.object({
 type AvatarChangeModalData = z.infer<typeof avatarChangeModalSchema>;
 
 interface AvatarChangeModalProps {
-  contact?: Pick<Contact, "avatar_url">;
+  contact?: Pick<Contact, "avatarUrl">;
 }
 
 const AvatarChangeModal = ({ contact }: AvatarChangeModalProps) => {
@@ -26,19 +26,19 @@ const AvatarChangeModal = ({ contact }: AvatarChangeModalProps) => {
     mode: "all",
     resolver: zodResolver(avatarChangeModalSchema),
   });
-  
+
   const onSubmit = (data: AvatarChangeModalData) => {
     if (!contact) return;
     if (data.linkAvatar === "") data.linkAvatar = null;
 
-    contact.avatar_url = data.linkAvatar;
-    console.log(contact.avatar_url);
+    contact.avatarUrl = data.linkAvatar;
+    console.log(contact.avatarUrl);
   };
 
   const handleCancelButtonClick = () => {
-    if (contact?.avatar_url) contact.avatar_url = null;
+    if (contact?.avatarUrl) contact.avatarUrl = null;
   };
-  
+
   return (
     <DialogContent aria-describedby={undefined} className="bg-bg-p border-0">
       <DialogTitle className="text-content-body font-semibold">
@@ -55,7 +55,7 @@ const AvatarChangeModal = ({ contact }: AvatarChangeModalProps) => {
             <Button
               type="button"
               className="bg-bg-t not-disabled:hover:bg-accent-red text-content-p"
-              content={contact?.avatar_url ? "Excluir" : "Cancelar"}
+              content={contact?.avatarUrl ? "Excluir" : "Cancelar"}
               onClick={handleCancelButtonClick}
             />
           </DialogClose>

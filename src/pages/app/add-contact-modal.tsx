@@ -7,7 +7,6 @@ import { twMerge } from "tailwind-merge";
 import { z } from "zod";
 
 import { addContact } from "@/api/add-contact";
-import { Contact } from "@/api/get-contacts";
 import Button from "@/components/button";
 import Input from "@/components/input";
 import LabelButton from "@/components/label-button";
@@ -20,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import Warning from "@/components/warning";
 import { formatarPhoneNumber as formatPhoneNumber } from "@/helpers/formatPhoneNumber";
+import { Contact } from "@/types/shared/contact";
 
 import AvatarChangeModal from "./avatar-change-modal";
 
@@ -70,18 +70,18 @@ const AddContactModal = () => {
           "get-contacts",
         ]);
 
-        const newContact: Contact = {
+        const newContact: Omit<Contact, "userId"> = {
           id: Math.random(),
           name,
           email,
           phone,
           description,
-          avatar_url: null,
-          isLocked: false,
+          avatarUrl: null,
         };
 
-        queryClient.setQueryData<Contact[]>(["get-contacts"], (old) =>
-          old ? [...old, newContact] : [newContact],
+        queryClient.setQueryData<Omit<Contact, "userId">[]>(
+          ["get-contacts"],
+          (old) => (old ? [...old, newContact] : [newContact]),
         );
 
         toast.success("Contato adicionado com sucesso!");
@@ -271,7 +271,7 @@ const AddContactModal = () => {
                   description,
                   phone,
                   email,
-                  avatar_url: null,
+                  avatarUrl: null,
                 });
 
                 reset();

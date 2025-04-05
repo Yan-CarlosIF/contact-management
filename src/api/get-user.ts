@@ -1,7 +1,5 @@
 import { api } from "@/lib/axios";
+import { User } from "@/types/shared/user";
 
-interface User {
-  email: string;
-}
-
-export const getUser = async () => (await api.get<User>("/getUser")).data;
+export const getUser = async () =>
+  (await api.get<Pick<User, "email" | "id" | "name">>("/user/get")).data;

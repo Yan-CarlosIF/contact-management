@@ -1,25 +1,20 @@
 import { api } from "@/lib/axios";
+import { Contact } from "@/types/shared/contact";
 
-interface UpdateContactSchema {
-  contactId: number;
-  name: string;
-  email: string;
-  phone: string;
-  avatar_url: string | null | undefined;
-}
+type UpdateContactSchema = Omit<Contact, "userId" | "description">;
 
 export const updateContact = async ({
-  contactId,
+  id,
   name,
   email,
   phone,
-  avatar_url,
+  avatarUrl,
 }: UpdateContactSchema) => {
-  await api.put<UpdateContactSchema>(`/updateContact`, {
-    contactId,
+  await api.patch<UpdateContactSchema>(`/contact/update`, {
+    id,
     name,
     email,
     phone,
-    avatar_url,
+    avatarUrl,
   });
 };

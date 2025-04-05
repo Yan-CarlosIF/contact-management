@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import Warning from "@/components/warning";
 import { formatarPhoneNumber } from "@/helpers/formatPhoneNumber";
-import { Contact } from "@/types/user";
+import { Contact } from "@/types/shared/contact";
 
 import AvatarChangeModal from "./avatar-change-modal";
 
@@ -36,7 +36,7 @@ const editModalSchema = z.object({
 type EditModalSchema = z.infer<typeof editModalSchema>;
 
 interface editContactModalProps {
-  contact: Pick<Contact, "name" | "email" | "phone" | "avatar_url" | "id">;
+  contact: Pick<Contact, "name" | "email" | "phone" | "avatarUrl" | "id">;
 }
 
 const EditContactModal = ({ contact }: editContactModalProps) => {
@@ -64,19 +64,19 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
   const { mutateAsync: editContactFn } = useMutation({
     mutationKey: ["get-contacts"],
     mutationFn: updateContact,
-    onMutate: ({ contactId, name, email, phone, avatar_url }) => {
+    onMutate: ({ id, name, email, phone, avatarUrl }) => {
       const oldContacts = queryClient.getQueryData<Contact[]>(["get-contacts"]);
 
       queryClient.setQueryData<Contact[]>(["get-contacts"], (oldContacts) => {
         if (oldContacts) {
           return oldContacts.map((contact) => {
-            if (contact.id === contactId) {
+            if (contact.id === id) {
               return {
                 ...contact,
                 name,
                 email,
                 phone,
-                avatar_url,
+                avatarUrl,
               };
             }
             return contact;
@@ -108,7 +108,7 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
       <div className="flex w-full flex-col items-center justify-center gap-4">
         <img
           className="h-16 w-16 rounded-2xl"
-          src={contact.avatar_url ?? userModal}
+          src={contact.avatarUrl ?? userModal}
           alt="Avatar do contato"
           onError={(e) => (e.currentTarget.src = userModal)}
         />
@@ -116,7 +116,7 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
           <DialogTrigger asChild>
             <LabelButton className="w-36 gap-1 py-3 text-sm font-semibold">
               <Upload size={14} />
-              {contact.avatar_url ? "Alterar foto" : "Adicionar foto"}
+              {contact.avatarUrl ? "Alterar foto" : "Adicionar foto"}
             </LabelButton>
           </DialogTrigger>
           <AvatarChangeModal contact={contact} />
@@ -235,13 +235,12 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
               disabled={!isValid}
               onClick={() => {
                 editContactFn({
-                  contactId: contact.id,
-                  email,
+                  id: contact.id,
                   name,
+                  email,
                   phone,
-                  avatar_url: contact.avatar_url,
+                  avatarUrl: contact.avatarUrl,
                 });
-                console.log(contact.avatar_url);
               }}
             />
           </DialogClose>

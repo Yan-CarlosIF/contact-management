@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import z from "zod";
 
-import { addUser } from "@/api/add-user";
+import { register as registerUser } from "@/api/register";
 
 import Button from "../../components/button";
 import Input from "../../components/input";
@@ -76,7 +76,7 @@ const SignUp = () => {
   };
 
   const { mutateAsync: addUserFn, isPending: isAddUserPending } = useMutation({
-    mutationFn: addUser,
+    mutationFn: registerUser,
     onSuccess: () => {
       reset();
       toast.success("Conta criada com sucesso!");

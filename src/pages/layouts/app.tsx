@@ -43,9 +43,6 @@ const AppLayout = () => {
               <Skeleton className="bg-muted-foreground h-3 w-40 animate-pulse" />
             )}
           </span>
-          <p className="text-content-body text-xs">
-            {localStorage.getItem("email")}
-          </p>
         </div>
       </aside>
       <div className="bg-bg-s my-[70px] mr-[84px] ml-10 w-full rounded-[40px] p-10">

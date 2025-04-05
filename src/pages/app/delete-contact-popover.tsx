@@ -2,13 +2,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { deleteContact } from "@/api/delete-contact";
-import { Contact } from "@/api/get-contacts";
 import Button from "@/components/button";
 import {
   DialogClose,
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Contact } from "@/types/shared/contact";
 
 interface DeleteContactModalProps {
   contact: Pick<Contact, "id">;
@@ -20,11 +20,11 @@ const DeleteContactPopover = ({ contact }: DeleteContactModalProps) => {
   const { mutateAsync: deleteContactFn } = useMutation({
     mutationKey: ["get-contacts"],
     mutationFn: deleteContact,
-    onMutate({ id }) {
+    onMutate({ contactId }) {
       const oldContacts = queryClient.getQueryData<Contact[]>(["get-contacts"]);
 
       queryClient.setQueryData<Contact[]>(["get-contacts"], (old) =>
-        old?.filter((contact) => contact.id !== id),
+        old?.filter((contact) => contact.id !== contactId),
       );
 
       toast.success("Contato excluído com sucesso!");
@@ -60,7 +60,7 @@ const DeleteContactPopover = ({ contact }: DeleteContactModalProps) => {
         <DialogClose asChild>
           <Button
             content="Confirmar"
-            onClick={() => deleteContactFn({ id: contact.id })}
+            onClick={() => deleteContactFn({ contactId: contact.id })}
           />
         </DialogClose>
       </div>

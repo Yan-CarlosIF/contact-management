@@ -1,10 +1,10 @@
 import { Pencil, Trash } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 
-import { Contact } from "@/api/get-contacts";
 import userTable from "@/assets/user_img_table.svg";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { encryptString } from "@/helpers/encrypt-string";
+import { Contact } from "@/types/shared/contact";
 
 import Button from "../../components/button";
 import LabelButton from "../../components/label-button";
@@ -36,7 +36,7 @@ const ContactsTable = ({ contacts }: ContactsTableProps) => {
                 <div className="bg-bg-t flex h-11 w-11 items-center justify-center place-self-start rounded-xl">
                   <img
                     className="h-11 w-11 rounded-2xl"
-                    src={contact.avatar_url ?? userTable}
+                    src={contact.avatarUrl ?? userTable}
                     alt="Avatar do contato"
                     onError={(e) => (e.currentTarget.src = userTable)}
                   />
