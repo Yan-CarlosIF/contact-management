@@ -1,11 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Upload } from "lucide-react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
 
+import { updateAvatar } from "@/api/update-avatar";
 import { updateContact } from "@/api/update-contact";
 import userModal from "@/assets/user_img_modal.svg";
 import Button from "@/components/button";
@@ -41,12 +43,14 @@ interface editContactModalProps {
 
 const EditContactModal = ({ contact }: editContactModalProps) => {
   const queryClient = useQueryClient();
+  const [originalAvatar, setOriginalAvatar] = useState(contact.avatarUrl);
 
   const {
     register,
     watch,
     formState: { errors, isValid },
     control,
+    reset,
   } = useForm<EditModalSchema>({
     mode: "all",
     resolver: zodResolver(editModalSchema),
@@ -64,7 +68,7 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
   const { mutateAsync: editContactFn } = useMutation({
     mutationKey: ["get-contacts"],
     mutationFn: updateContact,
-    onMutate: ({ id, name, email, phone, avatarUrl }) => {
+    onMutate: ({ id, name, email, phone }) => {
       const oldContacts = queryClient.getQueryData<Contact[]>(["get-contacts"]);
 
       queryClient.setQueryData<Contact[]>(["get-contacts"], (oldContacts) => {
@@ -76,7 +80,6 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
                 name,
                 email,
                 phone,
-                avatarUrl,
               };
             }
             return contact;
@@ -92,9 +95,57 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
       if (context?.oldContacts) {
         queryClient.setQueryData(["get-contacts"], context.oldContacts);
       }
+
       toast.error("Erro ao editar contato");
     },
   });
+
+  const { mutateAsync: revertAvatarFn } = useMutation({
+    mutationKey: ["get-contacts"],
+    mutationFn: updateAvatar,
+    onMutate: ({ id, avatarUrl }) => {
+      const oldContacts = queryClient.getQueryData<Contact[]>(["get-contacts"]);
+
+      queryClient.setQueryData<Contact[]>(["get-contacts"], (oldContacts) => {
+        if (oldContacts) {
+          return oldContacts.map((contact) => {
+            if (contact.id === id) {
+              return {
+                ...contact,
+                avatarUrl,
+              };
+            }
+
+            return contact;
+          });
+        }
+      });
+
+      return { oldContacts };
+    },
+
+    onError: (_, __, context) => {
+      if (context?.oldContacts) {
+        queryClient.setQueryData(["get-contacts"], context.oldContacts);
+      }
+
+      toast.error("Erro ao cancelar a alteração do avatar");
+    },
+  });
+
+  const handleCancelButtonClick = async () => {
+    await revertAvatarFn({ avatarUrl: originalAvatar, id: contact.id });
+    reset({
+      email: contact.email,
+      name: contact.name,
+      phone: contact.phone,
+    });
+  };
+
+  const handleSaveButtonClick = async () => {
+    await editContactFn({ id: contact.id, name, email, phone });
+    setOriginalAvatar(contact.avatarUrl);
+  };
 
   return (
     <DialogContent
@@ -223,25 +274,20 @@ const EditContactModal = ({ contact }: editContactModalProps) => {
 
         <div className="bg-content-muted h-[0.5px] w-full opacity-40"></div>
         <div className="mt-4 flex justify-end gap-[13px]">
-          <Button
-            type="button"
-            content="Cancelar"
-            className="bg-bg-t not-disabled:hover:bg-accent-red text-content-p"
-          />
+          <DialogClose asChild>
+            <Button
+              type="button"
+              content="Cancelar"
+              className="bg-bg-t not-disabled:hover:bg-accent-red text-content-p"
+              onClick={handleCancelButtonClick}
+            />
+          </DialogClose>
           <DialogClose asChild>
             <Button
               content="Salvar"
               type="button"
               disabled={!isValid}
-              onClick={() => {
-                editContactFn({
-                  id: contact.id,
-                  name,
-                  email,
-                  phone,
-                  avatarUrl: contact.avatarUrl,
-                });
-              }}
+              onClick={handleSaveButtonClick}
             />
           </DialogClose>
         </div>

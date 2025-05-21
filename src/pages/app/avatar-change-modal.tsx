@@ -1,7 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
+import { updateAvatar } from "@/api/update-avatar";
 import Button from "@/components/button";
 import Input from "@/components/input";
 import {
@@ -18,25 +21,54 @@ const avatarChangeModalSchema = z.object({
 type AvatarChangeModalData = z.infer<typeof avatarChangeModalSchema>;
 
 interface AvatarChangeModalProps {
-  contact?: Pick<Contact, "avatarUrl">;
+  contact: Pick<Contact, "id" | "avatarUrl">;
 }
 
 const AvatarChangeModal = ({ contact }: AvatarChangeModalProps) => {
+  const queryClient = useQueryClient();
   const { register, handleSubmit } = useForm<AvatarChangeModalData>({
     mode: "all",
     resolver: zodResolver(avatarChangeModalSchema),
   });
 
   const onSubmit = (data: AvatarChangeModalData) => {
-    if (!contact) return;
-    if (data.linkAvatar === "") data.linkAvatar = null;
-
-    contact.avatarUrl = data.linkAvatar;
-    console.log(contact.avatarUrl);
+    updateAvatarFn({ avatarUrl: data.linkAvatar, id: contact.id });
   };
 
-  const handleCancelButtonClick = () => {
-    if (contact?.avatarUrl) contact.avatarUrl = null;
+  const { mutateAsync: updateAvatarFn } = useMutation({
+    mutationKey: ["get-contacts"],
+    mutationFn: updateAvatar,
+    onMutate: ({ avatarUrl, id }) => {
+      const oldContacts = queryClient.getQueryData<Contact[]>(["get-contacts"]);
+
+      queryClient.setQueryData<Contact[]>(["get-contacts"], (oldContacts) => {
+        if (oldContacts) {
+          return oldContacts.map((contact) => {
+            if (contact.id === id) {
+              return {
+                ...contact,
+                avatarUrl,
+              };
+            }
+            return contact;
+          });
+        }
+      });
+
+      toast.success("Imagem alterada com sucesso!");
+      return { oldContacts };
+    },
+    onError: (_, __, context) => {
+      if (context?.oldContacts) {
+        queryClient.setQueryData(["get-contacts"], context.oldContacts);
+      }
+
+      toast.error("Erro ao alterar imagem");
+    },
+  });
+
+  const handleCancelButtonClick = async () => {
+    await updateAvatarFn({ avatarUrl: null, id: contact.id });
   };
 
   return (
