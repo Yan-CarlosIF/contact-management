@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Upload, User } from "lucide-react";
+import { User } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
@@ -9,19 +9,14 @@ import { z } from "zod";
 import { addContact } from "@/api/add-contact";
 import Button from "@/components/button";
 import Input from "@/components/input";
-import LabelButton from "@/components/label-button";
 import {
-  Dialog,
   DialogClose,
   DialogContent,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import Warning from "@/components/warning";
 import { formatarPhoneNumber as formatPhoneNumber } from "@/helpers/formatPhoneNumber";
 import { Contact } from "@/types/shared/contact";
-
-import AvatarChangeModal from "./avatar-change-modal";
 
 const editModalSchema = z.object({
   name: z.string().nonempty("O nome é obrigatorio"),
@@ -114,16 +109,6 @@ const AddContactModal = () => {
         <div className="bg-bg-t text-content-body flex h-16 w-16 items-center justify-center rounded-xl">
           <User size={36} />
         </div>
-
-        <Dialog>
-          <DialogTrigger asChild>
-            <LabelButton className="w-36 gap-1 py-3 text-sm font-semibold">
-              <Upload size={14} />
-              Adicionar foto
-            </LabelButton>
-          </DialogTrigger>
-          <AvatarChangeModal />
-        </Dialog>
       </div>
 
       <form className="mt-3">
