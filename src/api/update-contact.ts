@@ -12,7 +12,7 @@ export const updateContact = async ({
   email,
   phone,
 }: UpdateContactSchema) => {
-  await api.patch<UpdateContactSchema>(`/contact/update`, {
+  await api.patch<UpdateContactSchema>(`/contacts`, {
     id,
     name,
     email,

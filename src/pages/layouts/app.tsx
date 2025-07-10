@@ -19,8 +19,8 @@ const AppLayout = () => {
   });
 
   const handleLogout = async () => {
-    const { message } = await logout();
-    toast.success(message);
+    await logout();
+    toast.success("Logout realizado com sucesso!");
     navigate("/sign-in");
     queryClient.clear();
   };

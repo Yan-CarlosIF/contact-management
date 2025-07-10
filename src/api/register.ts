@@ -4,5 +4,5 @@ import { User } from "@/types/shared/user";
 type RegisterSchema = Omit<User, "id">;
 
 export async function register({ name, email, password }: RegisterSchema) {
-  await api.post<RegisterSchema>("/auth/register", { name, email, password });
+  await api.post<RegisterSchema>("/user/register", { name, email, password });
 }

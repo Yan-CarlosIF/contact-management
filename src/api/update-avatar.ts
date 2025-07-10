@@ -6,7 +6,7 @@ type UpdateAvatarSchema = {
 };
 
 export function updateAvatar({ avatarUrl, id }: UpdateAvatarSchema) {
-  return api.patch<UpdateAvatarSchema>(`/contact/update-avatar`, {
+  return api.patch<UpdateAvatarSchema>(`/contacts/update-avatar`, {
     avatarUrl,
     id,
   });

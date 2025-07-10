@@ -10,7 +10,7 @@ export const addContact = async ({
   email,
   avatarUrl,
 }: AddContactSchema) => {
-  await api.post<Contact>("/contact/add", {
+  await api.post<Contact>("/contacts", {
     avatarUrl,
     description,
     name,
